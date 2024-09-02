@@ -16,16 +16,27 @@ public class ClientApplication {
 
 	public static void main(String[] args) {
 
-		SpringApplication.run(ClientApplication.class, args);
+//		SpringApplication.run(ClientApplication.class, args);
 		ConfigurableApplicationContext ctx = new
 				SpringApplicationBuilder(ClientApplication.class)
 				.web(WebApplicationType.NONE)
 				.run(args);
 
-		WebClient loadBalanacedClient = ctx.getBean(WebClient.Builder.class).build();
+//		WebClient loadBalanacedClient =
 
-		for(int i = 0; i < 10; i++) {
-			String response = loadBalanacedClient.get().uri("http://localhost:8086/hello")
+		// Create a simple WebClient without load balancing
+		WebClient webClient = WebClient.builder().build();
+		final String[] serverUrls = {"http://localhost:8080/hello",
+				"http://localhost:8081/hello"};
+
+		int counter = 0;
+		int len = serverUrls.length;
+
+		for(int i = 1; i <= 20; i++) {
+
+			String tempUrl = serverUrls[counter % len];
+			counter++;
+			String response = webClient.get().uri(tempUrl)
 					.retrieve().toEntity(String.class)
 					.block().getBody();
 			System.out.println(response);
