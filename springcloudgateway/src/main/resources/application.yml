@@ -1,0 +1,12 @@
+server:
+  port: 8085
+spring:
+  application:
+    name: springcloudgateway
+  cloud:
+    gateway:
+      routes:
+        - id: testapigateway
+          uri: http://localhost:9090
+          predicates:
+            - Path=/demo/**
