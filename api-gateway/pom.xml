@@ -12,7 +12,7 @@
 	<artifactId>api-gateway</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>api-gateway</name>
-	<description>Demo project to test api-gateway</description>
+	<description>Demo project for api-gateway</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -46,6 +46,12 @@
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.netty</groupId>
+			<artifactId>netty-resolver-dns-native-macos</artifactId>
+			<version>4.1.72.Final</version>
+			<classifier>osx-aarch_64</classifier>
 		</dependency>
 
 		<dependency>
