@@ -16,8 +16,11 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
+//    @Autowired
+//    private RestTemplate restTemplate;
+
     @Autowired
-    private RestTemplate restTemplate;
+    private APIClient apiClient;
 
     @Override
     public User saveUser(User user) {
@@ -31,14 +34,16 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(userId).get();
         UserDto userDto = mapToUser(user);
         //we are using RestTemplate to make a REST API call to department-service
-        ResponseEntity<DepartmentDto> responseEntity = restTemplate
-                .getForEntity("http://localhost:8080/api/departments/" + user.getDepartmentId(),
-                        DepartmentDto.class);
+//        ResponseEntity<DepartmentDto> responseEntity = restTemplate
+//                .getForEntity("http://localhost:8080/api/departments/" + user.getDepartmentId(),
+//                        DepartmentDto.class);
+//
+//        DepartmentDto departmentDto = responseEntity.getBody();
+//        System.out.println(responseEntity.getStatusCode());
 
-        DepartmentDto departmentDto = responseEntity.getBody();
-
-        System.out.println(responseEntity.getStatusCode());
-
+        String departmentId = user.getDepartmentId();
+        DepartmentDto departmentDto = apiClient.getDepartmentById(Long.parseLong(departmentId));
+        System.out.println(departmentDto);
         responseDto.setUser(userDto);
         responseDto.setDepartment(departmentDto);
 
