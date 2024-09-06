@@ -23,7 +23,6 @@ public class WeightedRoundRobinLoadBalancer implements ReactorServiceInstanceLoa
     private final AtomicInteger position;
     private final String serviceId;
     private final LoadBalancerClientFactory clientFactory;
-
     private final DiscoveryClient discoveryClient;
     private final Map<String, Integer> instanceWeights;
 
@@ -33,15 +32,15 @@ public class WeightedRoundRobinLoadBalancer implements ReactorServiceInstanceLoa
         this.discoveryClient = discoveryClient;
         this.position = new AtomicInteger(0);
         this.instanceWeights = new HashMap<>();
-        initializeWeights();
     }
 
-    private void initializeWeights() {
-        // Get service instances using discoveryClient
-        List<ServiceInstance> instances = discoveryClient.getInstances(serviceId);
+    private void initializeWeights(List<ServiceInstance> instances) {
+        instanceWeights.clear(); // Clear existing weights to prevent stale data
         for (ServiceInstance instance : instances) {
-            // Use both instance ID and port to differentiate instances in the map
-            String instanceKey = instance.getHost() + ":" + instance.getPort();  // Combine host and port to create a unique key
+            // Combine instance ID, host, and port to create a unique key
+            String instanceKey = instance.getInstanceId() + "-" + instance.getHost() + ":" + instance.getPort();
+
+            // Assign weight based on the port (customizable)
             if (instance.getPort() == 8080) {
                 instanceWeights.put(instanceKey, 3); // Higher weight for instance running on port 8080
             } else if (instance.getPort() == 8082) {
@@ -58,17 +57,23 @@ public class WeightedRoundRobinLoadBalancer implements ReactorServiceInstanceLoa
             return Mono.just(new EmptyResponse());
         }
 
+        // Initialize weights based on the current instances
+        initializeWeights(instances);
+
+        // Calculate the total weight
         int totalWeight = instances.stream()
                 .mapToInt(instance -> {
-                    String instanceKey = instance.getHost() + ":" + instance.getPort();  // Unique key
+                    String instanceKey = instance.getInstanceId() + "-" + instance.getHost() + ":" + instance.getPort(); // Use instanceId along with host:port
                     return instanceWeights.getOrDefault(instanceKey, 1);  // Use unique key to get the weight
                 })
                 .sum();
 
+        // Calculate the position
         int pos = Math.abs(this.position.incrementAndGet()) % totalWeight;
 
+        // Iterate over instances and select the one based on the weighted round robin algorithm
         for (ServiceInstance instance : instances) {
-            String instanceKey = instance.getHost() + ":" + instance.getPort();  // Unique key
+            String instanceKey = instance.getInstanceId() + "-" + instance.getHost() + ":" + instance.getPort();  // Unique key using instanceId
             int weight = instanceWeights.getOrDefault(instanceKey, 1);  // Get the weight for this instance
             if (pos < weight) {
                 return Mono.just(new DefaultResponse(instance));
@@ -76,7 +81,8 @@ public class WeightedRoundRobinLoadBalancer implements ReactorServiceInstanceLoa
             pos -= weight;
         }
 
+        // Fallback to the first instance if no other instance is selected
         return Mono.just(new DefaultResponse(instances.get(0)));
     }
-
 }
+
