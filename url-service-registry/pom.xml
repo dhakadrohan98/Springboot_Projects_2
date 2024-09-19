@@ -63,6 +63,26 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+
+			<plugin>
+				<groupId>com.google.cloud.tools</groupId>
+				<artifactId>jib-maven-plugin</artifactId>
+				<version>3.4.0</version>
+				<configuration>
+					<to>
+						<image>rohandhakad20/service-registry</image> <!-- Replace with your actual DockerHub username -->
+						<credHelper></credHelper> <!-- leave this empty to bypass the helper -->
+					</to>
+					<container>
+						<environment>
+							<!-- No special environment variables required for Eureka -->
+						</environment>
+						<ports>
+							<port>8761</port> <!-- Eureka server will run on this port -->
+						</ports>
+					</container>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 

@@ -17,7 +17,6 @@ import java.util.concurrent.TimeUnit;
 
 
 @SpringBootApplication
-@EnableDiscoveryClient
 public class UrlShorteningApplication {
 
 //    @Autowired
