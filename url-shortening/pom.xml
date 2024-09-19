@@ -35,10 +35,12 @@
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-		</dependency>
+		<!-- use kubernetes service registry instead of eureka client-->
+<!--		<dependency>-->
+<!--			<groupId>org.springframework.cloud</groupId>-->
+<!--			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>-->
+<!--		</dependency>-->
+
 		<!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
 		<dependency>
 			<groupId>com.google.guava</groupId>
@@ -119,7 +121,7 @@
 					<container>
 						<environment>
 							<!-- Set the MySQL connection environment variables -->
-							<SPRING_DATASOURCE_URL>jdbc:mysql://mysqlContainer:3306/urlshortner</SPRING_DATASOURCE_URL>
+							<SPRING_DATASOURCE_URL>jdbc:mysql://mysql-service:3306/urlshortner</SPRING_DATASOURCE_URL>
 							<SPRING_DATASOURCE_USERNAME>root</SPRING_DATASOURCE_USERNAME>
 							<SPRING_DATASOURCE_PASSWORD>root</SPRING_DATASOURCE_PASSWORD>
 						</environment>
