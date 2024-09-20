@@ -3,7 +3,8 @@ package com.wissen.student.controller;
 import com.wissen.student.entity.Student;
 import com.wissen.student.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,36 +16,34 @@ public class StudentController {
     private StudentService studentService;
 
     @GetMapping("/students")
-    public List<Student> fetchStudentList() {
-        return this.studentService.getAllStudent();
+    public ResponseEntity<List<Student>> fetchStudentList() {
+        List<Student> allStudent = this.studentService.getAllStudent();
+        return new ResponseEntity<>(allStudent, HttpStatus.OK);
     }
 
     @GetMapping("/student/{id}")
-    public Student fetchStudentById(@PathVariable("id") Long studentId) {
-        return this.studentService.getStudentById(studentId);
+    public ResponseEntity<Student> fetchStudentById(@PathVariable("id") Long studentId) {
+        Student student = this.studentService.getStudentById(studentId);
+        return ResponseEntity.ok(student);
     }
 
     @PostMapping("/student")
-    public Student createStudent(@RequestBody Student student) {
-//        StringBuilder sb = new StringBuilder();
-//        List<String> subjects = student.getSubjects();
-//        for(String subject : subjects) {
-//            sb.append(subject);
-//        }
-//        String subj = sb.toString();
-        return this.studentService.saveStudent(student);
+    public ResponseEntity<Student> createStudent(@RequestBody Student student) {
+        Student savedStud = this.studentService.saveStudent(student);
+        return new ResponseEntity<>(savedStud, HttpStatus.CREATED);
     }
 
     @PutMapping("/student/{id}")
-    public Student updateStudent(@PathVariable("id") Long studentId,
+    public ResponseEntity<Student> updateStudent(@PathVariable("id") Long studentId,
                                  @RequestBody Student student)
     {
-        return this.studentService.updateStudent(studentId, student);
+        Student updateStud = this.studentService.updateStudent(studentId, student);
+        return new ResponseEntity<>(updateStud, HttpStatus.OK);
     }
 
     @DeleteMapping("/student/{id}")
-    public void deleteStudent(@PathVariable("id") Long studentId) {
+    public ResponseEntity<Void> deleteStudent(@PathVariable("id") Long studentId) {
         this.studentService.deleteStudentById(studentId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
 }
