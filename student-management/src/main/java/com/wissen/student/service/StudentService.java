@@ -7,7 +7,7 @@ import java.util.List;
 public interface StudentService {
     //save a single student
     public Student saveStudent(Student student);
-    //fetch all students data
+    //fetch all students data.
     public List<Student> getAllStudent();
     //fetch student details by id
     public Student getStudentById(Long studentId);
