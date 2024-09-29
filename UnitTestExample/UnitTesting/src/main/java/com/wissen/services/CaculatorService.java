@@ -13,8 +13,7 @@ public class CaculatorService {
         if(b != 0) {
             return a/b;
         } else {
-            System.out.println("Divide by 0 is not invalid");
-            return -1;
+            throw new ArithmeticException();
         }
     }
 
