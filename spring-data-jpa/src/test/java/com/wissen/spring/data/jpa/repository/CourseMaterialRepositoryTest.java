@@ -58,13 +58,13 @@ class CourseMaterialRepositoryTest {
 
         Course course = Course
                 .builder()
-                .title("Computer network")
-                .credit(6)
+                .title("Core java")
+                .credit(10)
                 .build();
 
         CourseMaterial courseMaterial = CourseMaterial
                 .builder()
-                .url("https://www.freecodecamp.org/news/how-to-confirm-your-application-is-using-nfs/")
+                .url("https://www.javatpoint.com/java-tutorial")
                 .course(course)
                 .build();
         this.courseMaterialRepository.save(courseMaterial);

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.wissen.DSAlgoProblemTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2024-09-29T11:51:51" hostname="PF4S9HRJ" time="0.752">
+  <properties/>
+  <testcase name="testMerge()" classname="com.wissen.DSAlgoProblemTest" time="0.752"/>
+  <system-out><![CDATA[17:21:50.141 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.wissen.DSAlgoProblemTest]: DSAlgoProblemTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+17:21:50.265 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.wissen.DsAlgoTestCasessApplication for test class com.wissen.DSAlgoProblemTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.3.2)
+
+2024-09-29T17:21:50.697+05:30  INFO 24504 --- [ds_algo_test_casess] [    Test worker] com.wissen.DSAlgoProblemTest             : Starting DSAlgoProblemTest using Java 17.0.11 with PID 24504 (started by Wissen in C:\Users\Wissen\IdeaProjects\ds_algo_test_cases)
+2024-09-29T17:21:50.698+05:30  INFO 24504 --- [ds_algo_test_casess] [    Test worker] com.wissen.DSAlgoProblemTest             : No active profile set, falling back to 1 default profile: "default"
+2024-09-29T17:21:51.968+05:30  INFO 24504 --- [ds_algo_test_casess] [    Test worker] com.wissen.DSAlgoProblemTest             : Started DSAlgoProblemTest in 1.536 seconds (process running for 2.746)
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
