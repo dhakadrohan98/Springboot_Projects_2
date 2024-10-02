@@ -25,6 +25,23 @@ public class DSAlgoTest {
         Assert.assertArrayEquals(expected2, nums);
     }
 
+    @Test
+    public void productExceptSelfTest() {
+        int[] nums = {-1,1,0,-3,3};
+        int[] expected = {0,0,9,0,0};
+        int[] result = dsAlgo.productExceptSelf(nums);
+        Assert.assertArrayEquals(expected, result);
+    }
+
+    @Test
+    public void subarraySumTest() {
+        int[] nums = {1,2,3,-3,1,1,1,4,2,-3};
+        int k = 3;
+        int result = dsAlgo.subarraySum(nums, k);
+        int expected = 8;
+        Assert.assertEquals(expected, result);
+    }
+
     @AfterClass
     public static void destroyObject() {
         dsAlgo = null;
