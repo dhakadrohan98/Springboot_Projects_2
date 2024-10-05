@@ -12,6 +12,7 @@ import java.util.Optional;
 @Service
 public class DepartmenServiceImpl implements DepartmentService {
 
+    //Field injection makes the class less testable & harder to manage
     @Autowired
     private DepartmentRepository departmentRepository;
 
