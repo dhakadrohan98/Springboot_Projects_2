@@ -1,10 +1,9 @@
 package com.mockitotest.MockTest.Service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import com.mockitotest.MockTest.Entity.Item;
 import com.mockitotest.MockTest.Repository.ItemRepository;
-import org.assertj.core.api.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,8 +25,21 @@ public class ItemServiceTest {
 
     @BeforeEach
     public void setUp() {
-        item1 = new Item(1L, "Notebook", 50, 2.0);
-        item2 = new Item(1L, "JavaBook", 100, 600.0);
+        item1 = new Item(1L, "Note", 55, 20.0);
+        item2 = new Item(1L, "Java", 105, 600.0);
+    }
+
+    @Test
+    public void testCreatItem() {
+        Item item = new Item();
+        item.setName("Groking the coding interview");
+        item.setPrice(600);
+        item.setQuantity(1000);
+        when(itemRepository.save(item)).thenReturn(item);
+        Item createdItem = itemServiceImpl.saveItem(item);
+        assertNotNull(createdItem);
+        assertEquals("Grokking the coding interview", createdItem.getName(), "String should be equal");
+        verify(itemRepository, times(1)).save(item);
     }
 
     @Test
