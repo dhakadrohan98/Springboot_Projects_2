@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Entity
-@NoArgsConstructor
 public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,6 +16,10 @@ public class Item {
     private String name;
     private int quantity;
     private double price;
+
+    public Item() {
+
+    }
 
     public Item(Long id, String name, int quantity, double price) {
         this.id = id;
