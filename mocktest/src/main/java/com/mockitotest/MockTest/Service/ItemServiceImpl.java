@@ -13,15 +13,28 @@ public class ItemServiceImpl implements ItemService {
     @Autowired
     private ItemRepository itemRepository;
 
+    @Override
     public Item saveItem(Item item) {
-        return itemRepository.save(item);
+        return this.itemRepository.save(item);
     }
 
+    @Override
     public List<Item> getAllItems() {
-        return itemRepository.findAll();
+        return this.itemRepository.findAll();
     }
 
+    @Override
     public Item getItemById(Long id) {
-        return itemRepository.findById(id).get();
+        return this.itemRepository.findById(id).get();
+    }
+
+    @Override
+    public Item updateItem(Long id, Item item) {
+        return this.itemRepository.save(item);
+    }
+
+    @Override
+    public void deleteItem(Long id) {
+        this.itemRepository.deleteById(id);
     }
 }
