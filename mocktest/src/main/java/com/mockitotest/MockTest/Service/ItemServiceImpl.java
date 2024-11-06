@@ -29,6 +29,11 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    public Item getItemByName(String name) {
+        return itemRepository.findByNameIgnoreCase(name);
+    }
+
+    @Override
     public Item updateItem(Long id, Item item) {
         return this.itemRepository.save(item);
     }
