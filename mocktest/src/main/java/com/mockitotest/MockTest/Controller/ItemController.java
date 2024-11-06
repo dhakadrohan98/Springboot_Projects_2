@@ -52,6 +52,20 @@ public class ItemController {
         return new ResponseEntity<>(item, HttpStatus.OK);
     }
 
+    @GetMapping("/search")
+    @Operation(summary = "Seach an item by name")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Found the item"),
+        @ApiResponse(responseCode = "404", description = "Item not found")
+    })
+    public ResponseEntity<Item> getItemByName(@RequestParam String name) {
+        Item item = itemService.getItemByName(name);
+        if(item != null) {
+            return new ResponseEntity<>(item, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+    }
+
     @PutMapping("/{id}")
     @Operation(summary = "Update an item by its id")
     @ApiResponses( value = {
