@@ -33,8 +33,8 @@ public class ItemServiceTest {
 
     @BeforeEach
     public void setUp() {
-        item1 = new Item(1L, "Note", 55, 20.0);
-        item2 = new Item(1L, "Java", 105, 600.0);
+        item1 = new Item("Note", 55, 20.0);
+        item2 = new Item("Java", 105, 600.0);
     }
 
     @Test
