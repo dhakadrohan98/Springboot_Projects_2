@@ -1,9 +1,6 @@
 package com.mockitotest.MockTest.Entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -13,16 +10,18 @@ public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(name = "name", nullable = false)
     private String name;
+    @Column(name = "quantity", nullable = false)
     private int quantity;
+    @Column(name = "price", nullable = false)
     private double price;
 
     public Item() {
 
     }
 
-    public Item(Long id, String name, int quantity, double price) {
-        this.id = id;
+    public Item(String name, int quantity, double price) {
         this.name = name;
         this.quantity = quantity;
         this.price = price;
