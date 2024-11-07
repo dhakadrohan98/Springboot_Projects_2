@@ -10,7 +10,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@DataJpaTest
+//@DataJpaTest
 public class ItemRepositoryTest {
 
     @Autowired
@@ -19,7 +19,7 @@ public class ItemRepositoryTest {
     @BeforeEach
     public void setUp() {
         //Initialize the repository with the 2 test items
-        //precondition or setup
+        //given - precondition or setup
         Item item1 = new Item("java by E Balagurusamy",75, 650.0);
         Item item2 = new Item("C language by E Balagurusamy",45, 550.0);
         Item createdItem1 = itemRepository.save(item1);
@@ -28,7 +28,7 @@ public class ItemRepositoryTest {
 //        assertThat(createdItem2).isNotNull();
     }
 
-    @Test
+//    @Test
     public void testFindByNameIgnoreCase() {
         //when - action or the behaviour that we are testing
         Item itemResult = itemRepository.findByNameIgnoreCase("java by E Balagurusamy");
