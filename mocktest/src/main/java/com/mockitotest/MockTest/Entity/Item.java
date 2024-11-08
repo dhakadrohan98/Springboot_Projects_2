@@ -21,6 +21,13 @@ public class Item {
 
     }
 
+    public Item(Long id, String name, int quantity, double price) {
+        this.id = id;
+        this.name = name;
+        this.quantity = quantity;
+        this.price = price;
+    }
+
     public Item(String name, int quantity, double price) {
         this.name = name;
         this.quantity = quantity;
