@@ -17,7 +17,7 @@ import java.util.Optional;
 
 //integrates Mockito with JUnit 5.
 @ExtendWith(MockitoExtension.class)
-public class ItemServiceTest {
+public class ItemServiceTDDTest {
 
     /**
      * @Mock and @InjectMocks are used to mock dependencies and inject them
