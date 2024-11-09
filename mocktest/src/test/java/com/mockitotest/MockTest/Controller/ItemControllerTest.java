@@ -1,62 +1,69 @@
 package com.mockitotest.MockTest.Controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mockitotest.MockTest.Entity.Item;
-import com.mockitotest.MockTest.Service.ItemService;
-import jakarta.servlet.ServletContext;
-import org.junit.jupiter.api.AfterEach;
+import com.mockitotest.MockTest.Service.ItemServiceImpl;
+import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.ArgumentMatchers;
+import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.core.AutoConfigureCache;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.MockMvcWebClientAutoConfiguration;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpInputMessage;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.RequestBuilder;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.jsonPath;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
-@SpringBootTest
-@AutoConfigureMockMvc
-@ExtendWith(MockitoExtension.class)
+@WebMvcTest
 class ItemControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    private ItemService itemService;
+    private ItemServiceImpl itemService;
 
-    //Trying to mokc the service layer to test the Controller class
-//    @Test
-//    public void testCreateItem() throws Exception {
-//        Item item = new Item();
-//        item.setName("Test Item");
-//        item.setPrice(10.0);
-//        item.setQuantity(3);
-//
-//        when(itemService.saveItem(any(Item.class))).thenReturn(item);
-//        mockMvc.perform(post("/api/items")
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content("{\"name\": \"Test Item\", \"price\": \"10.0\", \"quantity\": \"100\"}")
-//                .andExpect(status().isOk()))
-//                .andExpect(jsonPath("$.name").value("Test item"));
-//
-//        verify(itemService, times(1)).createItem(any(Item.class));
-//    }
+    @Autowired
+    private ObjectMapper objectMapper;
+    //used to convert object into json
 
-//    public RequestBuilder buildCreateItemRequest(Item item) {
-//        return post("/api/items").co
-//    }
+    private Item item;
+
+    @BeforeEach
+    public void setUp() {
+        item = new Item("harry potter by JK Rowling", 20, 400);
+    }
+
+    @Test
+    public void testCreateItem() throws Exception {
+        //given precondition or setup
+        BDDMockito.given(itemService.saveItem(ArgumentMatchers.any(Item.class)))
+                .willAnswer(invocation -> invocation.getArgument(0));
+
+        //when - action or behaviour that we are going to test
+        // Convert Java object to JSON string
+        String itemJsonString = objectMapper.writeValueAsString(item);
+
+        ResultActions response = mockMvc.perform(post("/api/items")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(itemJsonString)
+        );
+
+        //then - verify the result or output using assert statements
+        //verify the status of rest API's response
+        //now verify the response of rest API contain a valid Json values
+        //verify the actual json values with the expected json values
+        response.andExpect(MockMvcResultMatchers.status().isCreated())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name",
+                        CoreMatchers.is(item.getName())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.quantity",
+                        CoreMatchers.is(item.getQuantity())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.price",
+                        CoreMatchers.is(item.getPrice())));
+
+    }
 }

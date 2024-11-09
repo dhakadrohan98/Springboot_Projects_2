@@ -40,7 +40,7 @@ public class ItemServiceTDDTest {
     @Test
     public void testCreatItem() {
         Item item = new Item();
-        item.setName("Groking the coding interview");
+        item.setName("Grokking the coding interview");
         item.setPrice(600);
         item.setQuantity(1000);
         when(itemRepository.save(item)).thenReturn(item);

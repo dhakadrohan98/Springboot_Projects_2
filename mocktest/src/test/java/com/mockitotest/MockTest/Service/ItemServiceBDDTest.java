@@ -37,7 +37,7 @@ public class ItemServiceBDDTest {
         //when - action or the behaviour that we are going test in Service layer
         Item savedItem = itemServiceImpl.saveItem(item);
 
-        //print the objects to verify that repository & service are mocked or not
+        //print the objects to verify that repository & service are mocked properly
         System.out.println(itemRepository);
         System.out.println(itemServiceImpl);
         System.out.println(savedItem);

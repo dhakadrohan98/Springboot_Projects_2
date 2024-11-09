@@ -19,6 +19,10 @@ public class ItemController {
     @Autowired
     private ItemServiceImpl itemService;
 
+    //Rest API return by default 200 as status code in GetMapping, PostMapping,
+    // PutMapping, DeleteMapping. To change the status according to rest API call
+    // method we return json object wrapped into ResponseEntity<jsonObj>
+
     @PostMapping
     @Operation(summary = "Create a item")
     @ApiResponses(value = {
