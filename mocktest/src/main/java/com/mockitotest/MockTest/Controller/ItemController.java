@@ -51,7 +51,7 @@ public class ItemController {
             @ApiResponse(responseCode = "200", description = "Found the items"),
             @ApiResponse(responseCode = "500", description = "Item not found")
     })
-    public ResponseEntity<Item> getItemById(@PathVariable Long id) {
+    public ResponseEntity<Item> getItemById(@PathVariable("id") Long id) {
         Item item = this.itemService.getItemById(id);
         return new ResponseEntity<>(item, HttpStatus.OK);
     }
