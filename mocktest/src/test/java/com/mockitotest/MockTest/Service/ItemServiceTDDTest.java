@@ -43,10 +43,14 @@ public class ItemServiceTDDTest {
         item.setName("Grokking the coding interview");
         item.setPrice(600);
         item.setQuantity(1000);
+        //step1 - given or precondition setup
         when(itemRepository.save(item)).thenReturn(item);
 
+        //step2 - action or the behaviour that we are going to test
         Item createdItem = itemServiceImpl.saveItem(item);
         System.out.println(createdItem);
+
+        //step3 - verify the output
         assertNotNull(createdItem);
         //comparison based on id which is null
         assertEquals(createdItem.getId(), item.getId());
