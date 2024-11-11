@@ -1,10 +1,13 @@
 package com.mockitotest.MockTest.Controller;
 
+import static org.mockito.BDDMockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mockitotest.MockTest.Entity.Item;
 import com.mockitotest.MockTest.Service.ItemServiceImpl;
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -15,13 +18,8 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.mockito.ArgumentMatchers;
-import static org.mockito.BDDMockito.*;
-
-
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 @WebMvcTest
 class ItemControllerTest {
@@ -114,5 +112,26 @@ class ItemControllerTest {
                         CoreMatchers.is(item2.getPrice())))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.quantity",
                         CoreMatchers.is(item2.getQuantity())));
+    }
+
+    //search employee by name
+    @Test
+    @DisplayName("testing search employee by name")
+    public void testGetItemByName() throws Exception {
+        //given precondition or setup
+        String name = "Harry potter and Chamber of Secrets";
+        given(itemService.getItemByName(name)).willReturn(item);
+
+        //when - action or the behaviour that we are going to test
+        ResultActions response = mockMvc.perform(get("/api/items/search")
+                .param("name", name)
+                .contentType(MediaType.APPLICATION_JSON));
+
+        //then - verify the output
+        response.andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name",
+                        CoreMatchers.is(item.getName())));
+
     }
 }
