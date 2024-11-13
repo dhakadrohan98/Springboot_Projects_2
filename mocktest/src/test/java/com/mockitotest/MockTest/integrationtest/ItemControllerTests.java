@@ -1,58 +1,58 @@
-package com.mockitotest.MockTest.Controller;
+package com.mockitotest.MockTest.integrationtest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import static org.mockito.BDDMockito.*;
-import org.mockito.ArgumentMatchers;
 import com.mockitotest.MockTest.Entity.Item;
-import com.mockitotest.MockTest.Service.ItemServiceImpl;
+import com.mockitotest.MockTest.Repository.ItemRepository;
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
 import java.util.ArrayList;
 import java.util.List;
 
-@WebMvcTest
-class ItemControllerTest {
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@AutoConfigureMockMvc
+public class ItemControllerTests {
 
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
-    private ItemServiceImpl itemService;
+    @Autowired
+    private ItemRepository itemRepository;
 
     @Autowired
     private ObjectMapper objectMapper;
-    //used to convert object into json
 
     private Item item;
     private Item item1;
     private Item item2;
 
     @BeforeEach
-    public void setUp() {
-        item = new Item("Harry potter and Chamber of Secrets", 50, 700);
-        item1 = new Item("Harry potter and the Philosopher's Stone", 30, 300);
-        item2 = new Item(20L,"Harry potter and the Goblet of fire", 30, 500);
+    void setup() {
+        //given precondition or setup
+        item = new Item(5L, "Harry potter and Chamber of Secrets", 50, 700);
+        item1 = new Item("Harry Potter and the Order of the Phoenix", 30, 300);
+        item2 = new Item("Harry potter and the Goblet of fire", 30, 500);
+//        itemRepository.deleteAll();
     }
 
     @Test
     public void testCreateItem() throws Exception {
-        //given precondition or setup
-        given(itemService.saveItem(ArgumentMatchers.any(Item.class)))
-                .willAnswer(invocation -> invocation.getArgument(0));
         //when - action or behaviour that we are going to test
         // Convert Java object to JSON string
-        String itemJsonString = objectMapper.writeValueAsString(item);
+        String itemJsonString = objectMapper.writeValueAsString(item2);
 
         ResultActions response = mockMvc.perform(post("/api/items")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -65,11 +65,11 @@ class ItemControllerTest {
         response.andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isCreated())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name",
-                        CoreMatchers.is(item.getName())))
+                        CoreMatchers.is(item2.getName())))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.quantity",
-                        CoreMatchers.is(item.getQuantity())))
+                        CoreMatchers.is(item2.getQuantity())))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.price",
-                        CoreMatchers.is(item.getPrice())));
+                        CoreMatchers.is(item2.getPrice())));
     }
 
     @Test
@@ -78,25 +78,23 @@ class ItemControllerTest {
         List<Item> listOfItems = new ArrayList<>();
         listOfItems.add(item);
         listOfItems.add(item1);
-        //stubbing method call
-        given(itemService.getAllItems()).willReturn(listOfItems);
+        listOfItems.add(item2);
 
         //when - action or the behaviour that we are going to test
         ResultActions response = mockMvc.perform(get("/api/items"));
 
         //then - verify the output
-       response.andExpect(MockMvcResultMatchers.status().isOk())
-               .andDo(MockMvcResultHandlers.print())
-               .andExpect(MockMvcResultMatchers.jsonPath("$.size()",
-                       CoreMatchers.is(listOfItems.size())));
+        response.andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.size()",
+                        CoreMatchers.is(listOfItems.size())));
     }
 
     //positive scenarios - valid employee id
     @Test
     public void testGetItemById() throws Exception {
         //given - precondition or setup
-        long itemId = 20L;
-        given(itemService.getItemById(itemId)).willReturn(item2);
+        long itemId = 5L;
 
         //when - action or the behaviour that we are going to test
         ResultActions response = mockMvc.perform(get("/api/items/{id}", itemId));
@@ -105,13 +103,13 @@ class ItemControllerTest {
         response.andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id",
-                        CoreMatchers.is(20)))
+                        CoreMatchers.is(5)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name",
-                        CoreMatchers.is(item2.getName())))
+                        CoreMatchers.is(item.getName())))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.price",
-                        CoreMatchers.is(item2.getPrice())))
+                        CoreMatchers.is(item.getPrice())))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.quantity",
-                        CoreMatchers.is(item2.getQuantity())));
+                        CoreMatchers.is(item.getQuantity())));
     }
 
     //search employee by name
@@ -120,7 +118,6 @@ class ItemControllerTest {
     public void testGetItemByName() throws Exception {
         //given precondition or setup
         String name = "Harry potter and Chamber of Secrets";
-        given(itemService.getItemByName(name)).willReturn(item);
 
         //when - action or the behaviour that we are going to test
         ResultActions response = mockMvc.perform(get("/api/items/search")
