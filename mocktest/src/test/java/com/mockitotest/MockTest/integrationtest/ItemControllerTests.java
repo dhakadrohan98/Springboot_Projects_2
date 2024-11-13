@@ -3,6 +3,7 @@ package com.mockitotest.MockTest.integrationtest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mockitotest.MockTest.Entity.Item;
 import com.mockitotest.MockTest.Repository.ItemRepository;
+import org.aspectj.lang.annotation.Before;
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -40,29 +41,41 @@ public class ItemControllerTests {
     private Item item2;
 
     @BeforeEach
-    void setup() {
+    public void setup() throws Exception {
         //given precondition or setup
-        item = new Item(5L, "Harry potter and Chamber of Secrets", 50, 700);
+        item = new Item("Harry potter and Chamber of Secrets", 50, 700);
         item1 = new Item("Harry Potter and the Order of the Phoenix", 30, 300);
         item2 = new Item("Harry potter and the Goblet of fire", 30, 500);
+        testCreateItem();
 //        itemRepository.deleteAll();
     }
 
-    @Test
+
+
     public void testCreateItem() throws Exception {
         //when - action or behaviour that we are going to test
         // Convert Java object to JSON string
-        String itemJsonString = objectMapper.writeValueAsString(item2);
+        String itemJsonString1 = objectMapper.writeValueAsString(item);
+        String itemJsonString2 = objectMapper.writeValueAsString(item1);
+        String itemJsonString3 = objectMapper.writeValueAsString(item2);
 
-        ResultActions response = mockMvc.perform(post("/api/items")
+        ResultActions response1 = mockMvc.perform(post("/api/items")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(itemJsonString)
+                .content(itemJsonString1)
+        );
+        ResultActions response2 = mockMvc.perform(post("/api/items")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(itemJsonString2)
+        );
+        ResultActions response3 = mockMvc.perform(post("/api/items")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(itemJsonString3)
         );
         //then - verify the result or output using assert statements
         //verify the status of rest API's response
         //now verify the response of rest API contain a valid Json values
         //verify the actual json values with the expected json values
-        response.andDo(MockMvcResultHandlers.print())
+        response3.andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isCreated())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name",
                         CoreMatchers.is(item2.getName())))
@@ -94,7 +107,7 @@ public class ItemControllerTests {
     @Test
     public void testGetItemById() throws Exception {
         //given - precondition or setup
-        long itemId = 5L;
+        long itemId = 1L;
 
         //when - action or the behaviour that we are going to test
         ResultActions response = mockMvc.perform(get("/api/items/{id}", itemId));
@@ -103,7 +116,7 @@ public class ItemControllerTests {
         response.andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id",
-                        CoreMatchers.is(5)))
+                        CoreMatchers.is(1)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name",
                         CoreMatchers.is(item.getName())))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.price",
