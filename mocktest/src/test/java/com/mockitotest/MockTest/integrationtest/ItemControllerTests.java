@@ -7,6 +7,7 @@ import org.aspectj.lang.annotation.Before;
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -23,7 +24,7 @@ import java.util.List;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @AutoConfigureMockMvc
 public class ItemControllerTests {
 
@@ -36,22 +37,28 @@ public class ItemControllerTests {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private Item item;
-    private Item item1;
-    private Item item2;
+    private static Item item;
+    private static Item item1;
+    private static Item item2;
 
-    @BeforeEach
-    public void setup() throws Exception {
-        //given precondition or setup
+    static {
         item = new Item("Harry potter and Chamber of Secrets", 50, 700);
         item1 = new Item("Harry Potter and the Order of the Phoenix", 30, 300);
         item2 = new Item("Harry potter and the Goblet of fire", 30, 500);
-        testCreateItem();
-//        itemRepository.deleteAll();
     }
 
+//    @BeforeEach
+//    public void setup() throws Exception {
+//        //given precondition or setup
+//        item = new Item("Harry potter and Chamber of Secrets", 50, 700);
+//        item1 = new Item("Harry Potter and the Order of the Phoenix", 30, 300);
+//        item2 = new Item("Harry potter and the Goblet of fire", 30, 500);
+//        testCreateItem();
+////        itemRepository.deleteAll();
+//    }
 
-
+    @Test
+    @Order(1)
     public void testCreateItem() throws Exception {
         //when - action or behaviour that we are going to test
         // Convert Java object to JSON string
@@ -75,6 +82,24 @@ public class ItemControllerTests {
         //verify the status of rest API's response
         //now verify the response of rest API contain a valid Json values
         //verify the actual json values with the expected json values
+        response1.andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isCreated())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name",
+                        CoreMatchers.is(item.getName())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.quantity",
+                        CoreMatchers.is(item.getQuantity())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.price",
+                        CoreMatchers.is(item.getPrice())));
+
+        response2.andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isCreated())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name",
+                        CoreMatchers.is(item1.getName())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.quantity",
+                        CoreMatchers.is(item1.getQuantity())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.price",
+                        CoreMatchers.is(item1.getPrice())));
+
         response3.andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isCreated())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name",
@@ -86,6 +111,7 @@ public class ItemControllerTests {
     }
 
     @Test
+    @Order(2)
     public void testGetAllEmployees() throws Exception {
         //given - precondition or setup
         List<Item> listOfItems = new ArrayList<>();
@@ -104,7 +130,8 @@ public class ItemControllerTests {
     }
 
     //positive scenarios - valid employee id
-    @Test
+//    @Test
+    @Order(3)
     public void testGetItemById() throws Exception {
         //given - precondition or setup
         long itemId = 1L;
@@ -128,6 +155,7 @@ public class ItemControllerTests {
     //search employee by name
     @Test
     @DisplayName("testing search employee by name")
+    @Order(4)
     public void testGetItemByName() throws Exception {
         //given precondition or setup
         String name = "Harry potter and Chamber of Secrets";
@@ -141,7 +169,7 @@ public class ItemControllerTests {
         response.andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name",
-                        CoreMatchers.is(item.getName())));
+                        CoreMatchers.is(name)));
 
     }
 }
