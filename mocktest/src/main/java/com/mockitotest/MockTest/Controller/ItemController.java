@@ -62,7 +62,7 @@ public class ItemController {
         @ApiResponse(responseCode = "200", description = "Found the item"),
         @ApiResponse(responseCode = "404", description = "Item not found")
     })
-    public ResponseEntity<Item> getItemByName(@RequestParam String name) {
+    public ResponseEntity<Item> getItemByName(@RequestParam("name") String name) {
         Item item = itemService.getItemByName(name);
         if(item != null) {
             return new ResponseEntity<>(item, HttpStatus.OK);
