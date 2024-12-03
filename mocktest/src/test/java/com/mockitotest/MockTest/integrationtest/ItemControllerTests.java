@@ -24,8 +24,8 @@ import java.util.List;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
-//@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-//@AutoConfigureMockMvc
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@AutoConfigureMockMvc
 public class ItemControllerTests {
 
     @Autowired
@@ -130,11 +130,11 @@ public class ItemControllerTests {
     }
 
     //positive scenarios - valid employee id
-//    @Test
+    @Test
     @Order(3)
     public void testGetItemById() throws Exception {
         //given - precondition or setup
-        long itemId = 1L;
+        long itemId = 5L;
 
         //when - action or the behaviour that we are going to test
         ResultActions response = mockMvc.perform(get("/api/items/{id}", itemId));
@@ -143,7 +143,7 @@ public class ItemControllerTests {
         response.andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id",
-                        CoreMatchers.is(1)))
+                        CoreMatchers.is(5)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name",
                         CoreMatchers.is(item.getName())))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.price",
@@ -165,7 +165,7 @@ public class ItemControllerTests {
                 .param("name", name)
                 .contentType(MediaType.APPLICATION_JSON));
 
-        //then - verify the output
+        //then - verify the outputa
         response.andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name",

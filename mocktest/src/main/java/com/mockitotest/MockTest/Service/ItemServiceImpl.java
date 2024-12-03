@@ -2,7 +2,6 @@ package com.mockitotest.MockTest.Service;
 
 import com.mockitotest.MockTest.Entity.Item;
 import com.mockitotest.MockTest.Repository.ItemRepository;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
