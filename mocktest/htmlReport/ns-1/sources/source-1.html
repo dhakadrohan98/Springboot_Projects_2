@@ -1,0 +1,177 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > ItemServiceBDDTest</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.mockitotest.MockTest.Service</a>
+</div>
+
+<h1>Coverage Summary for Class: ItemServiceBDDTest (com.mockitotest.MockTest.Service)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ItemServiceBDDTest</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (18/18)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.mockitotest.MockTest.Service;
+&nbsp;
+&nbsp;import com.mockitotest.MockTest.Entity.Item;
+&nbsp;import com.mockitotest.MockTest.Repository.ItemRepository;
+&nbsp;import org.assertj.core.api.Assertions;
+&nbsp;import org.junit.jupiter.api.BeforeEach;
+&nbsp;import org.junit.jupiter.api.DisplayName;
+&nbsp;import org.junit.jupiter.api.Test;
+&nbsp;import org.junit.jupiter.api.extension.ExtendWith;
+&nbsp;import static org.mockito.BDDMockito.*;
+&nbsp;import org.mockito.InjectMocks;
+&nbsp;import org.mockito.Mock;
+&nbsp;import org.mockito.junit.jupiter.MockitoExtension;
+&nbsp;
+&nbsp;@ExtendWith(MockitoExtension.class)
+<b class="fc">&nbsp;public class ItemServiceBDDTest {</b>
+&nbsp;
+&nbsp;    @Mock
+&nbsp;    private ItemRepository itemRepository;
+&nbsp;
+&nbsp;    @InjectMocks
+&nbsp;    private ItemServiceImpl itemServiceImpl;
+&nbsp;
+&nbsp;    private Item item;
+&nbsp;
+&nbsp;    @BeforeEach
+&nbsp;    public void setup() {
+<b class="fc">&nbsp;        item = new Item(1L,&quot;harry potter by JK Rowling&quot;, 20, 400);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @DisplayName(&quot;Junit test to saveItem() method&quot;)
+&nbsp;    @Test
+&nbsp;    public void givenEmployeeObject_whenSaveEmployee_thenReturnEmployeeObject() {
+&nbsp;        //given - precondition or setup
+<b class="fc">&nbsp;        given(itemRepository.save(item)).willReturn(item);</b>
+&nbsp;
+&nbsp;        //when - action or the behaviour that we are going test in Service layer
+<b class="fc">&nbsp;        Item savedItem = itemServiceImpl.saveItem(item);</b>
+&nbsp;
+&nbsp;        //print the objects to verify that repository &amp; service are mocked properly
+<b class="fc">&nbsp;        System.out.println(itemRepository);</b>
+<b class="fc">&nbsp;        System.out.println(itemServiceImpl);</b>
+<b class="fc">&nbsp;        System.out.println(savedItem);</b>
+&nbsp;        //then - verify the output
+<b class="fc">&nbsp;        Assertions.assertThat(savedItem).isNotNull();</b>
+<b class="fc">&nbsp;        Assertions.assertThat(savedItem.getName()).isEqualToIgnoringCase(&quot;harry potter by JK Rowling&quot;);</b>
+&nbsp;
+<b class="fc">&nbsp;        then(itemRepository).should().save(item);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @DisplayName(&quot;test getByItemByName() method&quot;)
+&nbsp;    @Test
+&nbsp;    public void testGetItemByName() {
+&nbsp;        //given precondition or setup (calling the method of ItemRepository in
+&nbsp;        // the same way as getItemByName() method did)
+<b class="fc">&nbsp;        given(itemRepository.findByNameIgnoreCase(item.getName())).willReturn(item);</b>
+&nbsp;
+&nbsp;        //when - action or behaviour we are going to test in the service layer
+<b class="fc">&nbsp;        Item itemByName = itemServiceImpl.getItemByName(item.getName());</b>
+&nbsp;
+&nbsp;        //print the objects to verify that repository &amp; service are mocked or not
+<b class="fc">&nbsp;        System.out.println(itemRepository);</b>
+<b class="fc">&nbsp;        System.out.println(itemServiceImpl);</b>
+<b class="fc">&nbsp;        System.out.println(itemByName);</b>
+&nbsp;
+&nbsp;        //then - verify the output
+<b class="fc">&nbsp;        Assertions.assertThat(itemByName).isNotNull();</b>
+<b class="fc">&nbsp;        Assertions.assertThat(itemByName.getName()).isEqualToIgnoringCase(&quot;harry potter by JK rowling&quot;);</b>
+&nbsp;
+<b class="fc">&nbsp;        then(itemRepository).should().findByNameIgnoreCase(item.getName());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-11-18 19:39</div>
+</div>
+</body>
+</html>
