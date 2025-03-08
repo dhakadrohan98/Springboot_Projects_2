@@ -3,7 +3,6 @@ package com.mockitotest.MockTest.integrationtest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mockitotest.MockTest.Entity.Item;
 import com.mockitotest.MockTest.Repository.ItemRepository;
-import org.aspectj.lang.annotation.Before;
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -12,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.env.Environment;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -37,6 +37,9 @@ public class ItemControllerTests {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private Environment environment;
+
     private static Item item;
     private static Item item1;
     private static Item item2;
@@ -56,6 +59,13 @@ public class ItemControllerTests {
 //        testCreateItem();
 ////        itemRepository.deleteAll();
 //    }
+
+    @BeforeEach
+    public void printBaseURIAndContextPath() {
+       String port = environment.getProperty("server.port");
+       String contextPath = environment.getProperty("server.servlet.context-path");
+       String baseUri =
+    }
 
     @Test
     @Order(1)
@@ -137,7 +147,7 @@ public class ItemControllerTests {
         long itemId = 5L;
 
         //when - action or the behaviour that we are going to test
-        ResultActions response = mockMvc.perform(get("/api/items/{id}", itemId));
+        ResultActions response = mockMvc.perform(get("/api/item/{id}", itemId));
 
         //then - verify the output
         response.andExpect(MockMvcResultMatchers.status().isOk())
