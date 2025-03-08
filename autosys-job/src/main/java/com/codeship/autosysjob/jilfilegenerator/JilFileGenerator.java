@@ -12,7 +12,7 @@ public class JilFileGenerator {
 
         String jilFileContent = """
                 insert_job: %s
-                job_type: c
+                job_type: CMD
                 command: "%s"
                 machine: localhost
                 owner: user@localhost

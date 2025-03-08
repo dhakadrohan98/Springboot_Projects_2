@@ -1,5 +1,5 @@
 insert_job: myjob
-job_type: c
+job_type: CMD
 command: "echo Hello Autosys! "
 machine: localhost
 owner: user@localhost
