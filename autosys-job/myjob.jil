@@ -1,0 +1,13 @@
+insert_job: myjob
+job_type: c
+command: "echo Hello Autosys! "
+machine: localhost
+owner: user@localhost
+permission: gx,wx
+std_out_file: "tmp/myjob.out"
+std_out_err: "tmp/myjob.err"
+date_conditions: 1
+days_of_week: all
+start_times: now
+run_calendar: no_calendar
+description: "Run AutoSys job immediately"

@@ -1,0 +1,7 @@
+insert_job: sample_job
+job_type: CMD
+command: echo "Hello, AutoSys!"
+machine: localhost
+owner: user@localhost
+start_times: "10:00"
+description: "This is a sample JIL job"
