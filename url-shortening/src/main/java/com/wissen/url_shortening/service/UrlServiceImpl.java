@@ -15,7 +15,8 @@ import java.time.LocalDateTime;
 
 @Component
 public class UrlServiceImpl implements UrlService {
-    private static final String BASE62 = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    
+    private static final String BASE64 = "+/0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
     @Autowired
     private UrlRepository urlRepository;
@@ -60,7 +61,7 @@ public class UrlServiceImpl implements UrlService {
      there's a small chance of collisions (different URLs generating the same short URL).
      This can be mitigated by checking for collisions or by using a different hash
      function with a larger bit size.
-    using md5() algorithm & writing custom base62Encoded() method logic*/
+    using md5() algorithm & writing custom BASE64Encoded() method logic*/
     private String generateShortUrl(String originalUrl) {
         // Add a unique salt or timestamp to make url unique
         String saltedUrl = originalUrl + LocalDateTime.now().toString();
@@ -75,21 +76,21 @@ public class UrlServiceImpl implements UrlService {
         //40 digits Big integer
         System.out.println("Hash number due to md5() => " + hashNumber);
 
-        //Base62 encoding of the hash (custom method)
-        String base62Encoded = base62Encoded(hashNumber);
+        //BASE64 encoding of the hash (custom method)
+        String BASE64Encoded = BASE64Encoded(hashNumber);
 
-        //take the first 7 characters
-        return base62Encoded.substring(0, 7);
+        //take the first 8 characters
+        return BASE64Encoded.substring(0, 8);
     }
 
-    private String base62Encoded(BigInteger hashNumber) {
+    private String BASE64Encoded(BigInteger hashNumber) {
         StringBuilder encodedString = new StringBuilder();
 
         while (hashNumber.compareTo(BigInteger.ZERO) > 0) {
-            BigInteger[] quotientAndRemainder = hashNumber.divideAndRemainder(BigInteger.valueOf(62));
-            // quotientAndRemainder[0] =  hashNumber/62;
-            // quotientAndRemainder[1] = hashNumber%62;
-            encodedString.append(BASE62.charAt(quotientAndRemainder[1].intValue()));
+            BigInteger[] quotientAndRemainder = hashNumber.divideAndRemainder(BigInteger.valueOf(64));
+            // quotientAndRemainder[0] =  hashNumber/64;
+            // quotientAndRemainder[1] = hashNumber%64;
+            encodedString.append(BASE64.charAt(quotientAndRemainder[1].intValue()));
             hashNumber = quotientAndRemainder[0];
         }
         //reverse the string as encoding produces the least significant digit first(LSB)
