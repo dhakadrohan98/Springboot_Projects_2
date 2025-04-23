@@ -13,6 +13,6 @@ import java.util.List;
 public class Hourly {
 
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-    private List<LocalDateTime> localDateTime;
+    private List<String> time;
     private List<Double> temperature_2m;
 }
