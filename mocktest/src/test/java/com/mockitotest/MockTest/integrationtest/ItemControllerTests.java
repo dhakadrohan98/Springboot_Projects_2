@@ -64,7 +64,7 @@ public class ItemControllerTests {
     public void printBaseURIAndContextPath() {
        String port = environment.getProperty("server.port");
        String contextPath = environment.getProperty("server.servlet.context-path");
-       String baseUri =
+//       String baseUri =
     }
 
     @Test
