@@ -14,5 +14,5 @@ public class Hourly {
 
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private List<String> time;
-    private List<Double> temperature_2m;
+    private List<Float> temperature_2m;
 }

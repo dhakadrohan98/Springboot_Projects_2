@@ -24,6 +24,11 @@ public class WeatherController {
     public ResponseEntity<WeatherResponseDTO> getWeatherDetails() {
         log.info("Inside getWeatherDetails() method");
         WeatherResponseDTO weatherResponseDTO = restTemplate.getForObject(url, WeatherResponseDTO.class);
+        //String apiKey = "YOUR_API_KEY";
+        //String url =
+        // "https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&hourly=temperature_2m&apikey={apiKey}"
+        // pass API key as query parameter
+        // restTemplate.getForObject(url, WeatherResponseDTO.class, apiKey);
         log.info(weatherResponseDTO.toString());
         return new ResponseEntity<>(weatherResponseDTO, HttpStatus.OK);
     }
