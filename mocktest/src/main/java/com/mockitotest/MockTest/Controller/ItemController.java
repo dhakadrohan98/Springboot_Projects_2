@@ -5,6 +5,7 @@ import com.mockitotest.MockTest.Service.ItemServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +30,7 @@ public class ItemController {
         @ApiResponse(responseCode = "201", description = "Item created"),
         @ApiResponse(responseCode = "400", description = "Invalid Input")
     })
-    public ResponseEntity<Item> createItem(@RequestBody Item item) {
+    public ResponseEntity<Item> createItem(@Valid @RequestBody Item item) {
         Item item1 = this.itemService.saveItem(item);
         return new ResponseEntity<>(item1, HttpStatus.CREATED);
     }
@@ -77,7 +78,7 @@ public class ItemController {
             @ApiResponse(responseCode = "404", description = "Item not found"),
             @ApiResponse(responseCode = "400", description = "Invalid Input")
     })
-    public ResponseEntity<Item> updateItem(@PathVariable Long id, @RequestBody Item item) {
+    public ResponseEntity<Item> updateItem(@PathVariable Long id, @Valid @RequestBody Item item) {
         Item itemToUpdate = this.itemService.getItemById(id);
         itemToUpdate.setName(item.getName());
         itemToUpdate.setQuantity(item.getQuantity());

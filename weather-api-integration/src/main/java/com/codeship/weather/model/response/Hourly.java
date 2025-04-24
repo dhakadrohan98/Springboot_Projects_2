@@ -1,17 +1,17 @@
-package com.weather.model;
+package com.codeship.weather.model.response;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.time.LocalDateTime;
+
 import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class Hourly {
-//    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private List<String> time;
-    private List<Float> temperature_2m;
+    @JsonProperty("temperature_2m")
+    private List<Float> temperature2M;
 }
