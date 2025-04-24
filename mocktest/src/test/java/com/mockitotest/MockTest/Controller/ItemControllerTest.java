@@ -1,6 +1,5 @@
 package com.mockitotest.MockTest.Controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.mockito.ArgumentMatchers;
 import com.mockitotest.MockTest.Entity.Item;
@@ -50,7 +49,7 @@ class ItemControllerTest {
     @Test
     public void testCreateItem() throws Exception {
         //given precondition or setup
-        //below stubbing will return the whatever (item) argument we have padded to saveItem()
+        //below stubbing will return the whatever (item) argument we have passed to saveItem()
         // method
         given(itemService.saveItem(ArgumentMatchers.any(Item.class)))
                 .willAnswer(invocation -> invocation.getArgument(0));
