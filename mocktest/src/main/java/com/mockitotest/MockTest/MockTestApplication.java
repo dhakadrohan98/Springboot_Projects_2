@@ -8,6 +8,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 public class MockTestApplication {
 
 	public static void main(String[] args) {
+
 		SpringApplication.run(MockTestApplication.class, args);
 	}
 }
