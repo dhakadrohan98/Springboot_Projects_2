@@ -1,8 +1,7 @@
 package com.user.config;
 
 import com.user.filter.JwtAuthFilter;
-import jakarta.servlet.Filter;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.user.util.JwtUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,9 +20,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 public class SecurityConfig {
-
-    @Autowired
-    private Filter jwtAuthFilter;
 
     @Bean
     public UserDetailsService userDetailsService() {
@@ -56,7 +52,12 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public JwtAuthFilter jwtAuthFilter(JwtUtil jwtUtil, UserDetailsService userDetailsService) {
+        return new JwtAuthFilter(jwtUtil, userDetailsService);
+    }
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthFilter jwtAuthFilter) throws Exception {
         http
                 .csrf(csrf -> csrf.disable()) //// Disable CSRF using lambda
                 .authorizeHttpRequests(auth -> auth

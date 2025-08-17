@@ -1,6 +1,6 @@
-package com.user.filter;
+package com.product.filter;
 
-import com.user.util.JwtUtil;
+import com.product.util.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
