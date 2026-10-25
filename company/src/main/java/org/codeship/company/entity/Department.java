@@ -26,6 +26,7 @@ public class Department {
     @Column(length = 100)
     private String location;
 
+    //its default value is true in database
     @Column(name= "is_active", nullable = false)
     private boolean active = true;
 
