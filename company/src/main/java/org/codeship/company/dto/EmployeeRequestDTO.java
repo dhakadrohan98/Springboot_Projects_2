@@ -11,10 +11,15 @@ public class EmployeeRequestDTO {
     @Size(max = 150, message = "Email cannot exceed 150 characters")
     private String email;
 
+    @NotBlank(message = "First name is required")
+    @Size(max = 100, message = "First name cannot exceed 100 characters")
     private String firstName;
 
+    @NotBlank(message = "Last name is required")
+    @Size(max = 100, message = "Last name cannot exceed 100 characters")
     private String lastName;
 
+    @Size(max=155, message = "Address can't exceed 255 characters")
     private String address;
 
     @NotNull(message = "Department ID is required")

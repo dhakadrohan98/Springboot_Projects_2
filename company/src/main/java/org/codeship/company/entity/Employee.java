@@ -1,6 +1,9 @@
 package org.codeship.company.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
+import lombok.Data;
+import lombok.Value;
 import org.hibernate.annotations.JoinColumnOrFormula;
 
 import java.math.BigDecimal;
@@ -27,8 +30,8 @@ public class Employee {
     @Column(length = 255)
     private String address;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "dept_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "dept_id", nullable = true)
     private Department department;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
-
+    //JPA query methods
     Optional<Employee> findByEmail(String name);
 
     List<Employee> findByFirstName(String name);
