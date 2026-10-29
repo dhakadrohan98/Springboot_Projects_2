@@ -1,6 +1,5 @@
 package org.codeship.company.service.impl;
 
-import org.codeship.company.dto.DepartmentResponseDTO;
 import org.codeship.company.dto.EmployeeRequestDTO;
 import org.codeship.company.dto.EmployeeResponseDTO;
 import org.codeship.company.entity.Department;
@@ -10,41 +9,51 @@ import org.codeship.company.repository.DepartmentRepository;
 import org.codeship.company.repository.EmployeeRepository;
 import org.codeship.company.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class EmployeeServiceImpl implements EmployeeService {
 
-    private EmployeeRepository employeeRepository;
-    private DepartmentRepository departmentRepository;
+    private final EmployeeRepository employeeRepository;
+    private final DepartmentRepository departmentRepository;
     private final EmployeeMapper employeeMapper;
 
-    public EmployeeServiceImpl(@Autowired EmployeeRepository employeeRepository,
-                               @Autowired DepartmentRepository departmentRepository,
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository,
+                               DepartmentRepository departmentRepository,
                                @Autowired EmployeeMapper employeeMapper) {
         this.employeeRepository = employeeRepository;
         this.departmentRepository = departmentRepository;
         this.employeeMapper = employeeMapper;
     }
 
+    //map all fields of employeeRequestDTO with Employee object
+    private void mapEmpResponseDtoToEmployeeEntity(Employee emp, EmployeeRequestDTO employeeRequestDTO) {
+        if(emp != null) {
+            emp.setEmail(employeeRequestDTO.getEmail());
+            emp.setFirstName(employeeRequestDTO.getFirstName());
+            emp.setLastName(employeeRequestDTO.getLastName());
+            emp.setAddress(employeeRequestDTO.getAddress());
+            emp.setSalary(employeeRequestDTO.getSalary());
+            emp.setDesignation(employeeRequestDTO.getDesignation());
+            //get DeptId if exists otherwise throw the error
+            Long requestedDeptId = employeeRequestDTO.getDeptId();
+//            Department department = this.departmentRepository.findById(requestedDeptId).get();
+//            if(department != null) {
+//                emp.setDepartment(department);
+//            }
+        }
+    }
+
     @Override
     public Long saveEmployee(EmployeeRequestDTO employeeRequestDTO) {
         Employee emp = emp = new Employee();
-        emp.setEmail(employeeRequestDTO.getEmail());
-        emp.setFirstName(employeeRequestDTO.getFirstName());
-        emp.setLastName(employeeRequestDTO.getLastName());
-        emp.setAddress(employeeRequestDTO.getAddress());
-        emp.setSalary(employeeRequestDTO.getSalary());
-        emp.setDesignation(employeeRequestDTO.getDesignation());
-       //get DeptId if exists otherwise throw the error
-        Long requestedDeptId = employeeRequestDTO.getDeptId();
-        Department department = this.departmentRepository.findById(requestedDeptId).get();
-        if(department != null) {
-            emp.setDepartment(department);
-        }
+        //map all fields from emp request dto to employee entity with its department
+        this.mapEmpResponseDtoToEmployeeEntity(emp, employeeRequestDTO);
         //save the entity into database
         this.employeeRepository.save(emp);
-
         //find the empIdBYEmail
         Employee empResponse = employeeRepository.findByEmail(employeeRequestDTO.getEmail()).get();
         if(empResponse != null) {
@@ -66,16 +75,31 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public List<EmployeeResponseDTO> getAllEmployees() {
-        return List.of();
+        List<Employee> employeeList = this.employeeRepository.findAll();
+        List<EmployeeResponseDTO> employeeResponseDTOList = new ArrayList<>();
+
+        for(Employee emp: employeeList) {
+            employeeResponseDTOList.add(employeeMapper.toResponseDTO(emp));
+        }
+        return employeeResponseDTOList;
     }
 
     @Override
     public EmployeeResponseDTO updateEmployeeById(Long id, EmployeeRequestDTO employeeRequestDTO) {
-        return null;
+        EmployeeResponseDTO employeeResponseDTO = null;
+        Employee emp = this.employeeRepository.findById(id).get();
+        //map all fields from emp request dto to employee entity with its department
+        this.mapEmpResponseDtoToEmployeeEntity(emp, employeeRequestDTO);
+        if(emp != null) {
+            this.employeeRepository.save(emp);
+            employeeResponseDTO = employeeMapper.toResponseDTO(emp);
+        }
+        //map emp with response DTOs
+        return employeeResponseDTO;
     }
 
     @Override
     public void deleteById(Long id) {
-        return;
+        this.employeeRepository.deleteById(id);
     }
 }
